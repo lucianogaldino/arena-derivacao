@@ -22,14 +22,18 @@ if "fase" not in st.session_state:
 # -------------------------------------------------
 def interpretar(expr):
     expr = expr.lower()
+    
+    # Substituições amigáveis
     expr = expr.replace("^", "**")
     expr = expr.replace("sen", "sin")
+    expr = expr.replace("tg", "tan")
+    expr = expr.replace("ln", "log")
+    expr = expr.replace("e**", "exp")  # evita conflito
+    expr = expr.replace("e^", "exp")
 
     transformations = standard_transformations + (
         implicit_multiplication_application,
     )
-
-    return parse_expr(expr, transformations=transformations)
 
 # -------------------------------------------------
 # SIDEBAR
