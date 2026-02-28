@@ -6,7 +6,7 @@ import re
 # CONFIGURAÇÃO
 # -------------------------------------------------
 st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔️")
-st.title("⚔️ Guardiões da Taxa de Variação")
+st.title("⚔️ Guardiões da Taxa de Variação — Nível Avançado")
 
 if "fase" not in st.session_state:
     st.session_state.fase = 1
@@ -32,27 +32,23 @@ if st.sidebar.button("🔄 Reiniciar Missão"):
     st.rerun()
 
 # =================================================
-# FASE 1 — DEFINIÇÃO
+# FASE 1 — DEFINIÇÃO (mais termos)
 # =================================================
 if st.session_state.fase == 1:
 
-    st.header("🧪 Fase 1 — Núcleo Fundamental")
+    st.header("🧪 Fase 1 — O Núcleo Fundamental")
 
     st.markdown("""
-    O reator central de Chronópolis precisa de calibração manual.
+    O reator central agora possui múltiplos componentes energéticos.
 
-    A energia é descrita por:
+    ### E(t) = t³ − 2t² + 5t − 7
 
-    ### E(t) = t² + 3t
-
-    ⚠️ Para ativar o núcleo, você deve calcular a  
-    **taxa de variação usando a definição formal (limite do quociente incremental)**.
-
-    Determine a taxa de variação final simplificada.
+    Para ativar o núcleo manualmente,  
+    calcule a **taxa de variação usando a definição formal (limite do quociente incremental)**.
     """)
 
     t = sp.symbols('t')
-    funcao = t**2 + 3*t
+    funcao = t**3 - 2*t**2 + 5*t - 7
     resposta_correta = sp.diff(funcao, t)
 
     resposta = st.text_input("Digite a taxa de variação:")
@@ -61,32 +57,32 @@ if st.session_state.fase == 1:
         try:
             resp = sp.sympify(normalizar(resposta))
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🔥 Núcleo ativado por definição!")
+                st.success("🔥 Núcleo ativado com sucesso!")
                 if st.button("➡️ Fase 2"):
                     st.session_state.fase = 2
             else:
-                st.error("⚠️ A definição não foi aplicada corretamente.")
+                st.error("❌ Revise a aplicação da definição.")
         except:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 2 — PRODUTO
+# FASE 2 — PRODUTO (com trigonometria)
 # =================================================
 elif st.session_state.fase == 2:
 
-    st.header("⚙️ Fase 2 — Engrenagens Sincronizadas")
+    st.header("⚙️ Fase 2 — Engrenagens Trigonométricas")
 
     st.markdown("""
-    O sistema mecânico depende de duas forças multiplicadas:
+    O sistema mecânico agora envolve oscilação angular.
 
-    ### F(x) = (x² + 1)(3x)
+    ### F(x) = (x² + 1) · sin(x)
 
-    Para manter as engrenagens funcionando,  
+    Para estabilizar o sistema,  
     calcule a **taxa de variação usando a regra do produto**.
     """)
 
     x = sp.symbols('x')
-    funcao = (x**2 + 1)*(3*x)
+    funcao = (x**2 + 1)*sp.sin(x)
     resposta_correta = sp.diff(funcao, x)
 
     resposta = st.text_input("Digite a taxa de variação:")
@@ -95,7 +91,7 @@ elif st.session_state.fase == 2:
         try:
             resp = sp.sympify(normalizar(resposta))
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("⚙️ Engrenagens sincronizadas!")
+                st.success("⚙️ Engrenagens estabilizadas!")
                 if st.button("➡️ Fase 3"):
                     st.session_state.fase = 3
             else:
@@ -104,23 +100,23 @@ elif st.session_state.fase == 2:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 3 — QUOCIENTE
+# FASE 3 — QUOCIENTE (com exponencial)
 # =================================================
 elif st.session_state.fase == 3:
 
-    st.header("🌊 Fase 3 — Fluxo Dividido")
+    st.header("🌊 Fase 3 — Fluxo Exponencial")
 
     st.markdown("""
-    O fluxo de energia agora é dado por:
+    O fluxo energético cresce exponencialmente.
 
-    ### Q(y) = (2y³ + 1) / (y)
+    ### Q(y) = eʸ / (y² + 1)
 
-    Para equilibrar o sistema hidráulico,  
-    determine a **taxa de variação usando a regra do quociente**.
+    Para manter o equilíbrio,  
+    calcule a **taxa de variação usando a regra do quociente**.
     """)
 
     y = sp.symbols('y')
-    funcao = (2*y**3 + 1)/y
+    funcao = sp.exp(y)/(y**2 + 1)
     resposta_correta = sp.diff(funcao, y)
 
     resposta = st.text_input("Digite a taxa de variação:")
@@ -129,7 +125,7 @@ elif st.session_state.fase == 3:
         try:
             resp = sp.sympify(normalizar(resposta))
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🌊 Fluxo estabilizado!")
+                st.success("🌊 Fluxo controlado!")
                 if st.button("➡️ Fase 4"):
                     st.session_state.fase = 4
             else:
@@ -138,23 +134,22 @@ elif st.session_state.fase == 3:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 4 — CADEIA
+# FASE 4 — CADEIA (trig dentro)
 # =================================================
 elif st.session_state.fase == 4:
 
-    st.header("🧬 Fase 4 — Reação em Cadeia")
+    st.header("🧬 Fase 4 — Reação Composta")
 
     st.markdown("""
-    A reação química depende de uma função dentro de outra:
+    A reação química agora envolve composição trigonométrica.
 
-    ### R(z) = (4z² + 1)³
+    ### R(z) = cos(3z² + 2z)
 
-    Para controlar a reação,  
-    calcule a **taxa de variação usando a regra da cadeia**.
+    Calcule a **taxa de variação usando a regra da cadeia**.
     """)
 
     z = sp.symbols('z')
-    funcao = (4*z**2 + 1)**3
+    funcao = sp.cos(3*z**2 + 2*z)
     resposta_correta = sp.diff(funcao, z)
 
     resposta = st.text_input("Digite a taxa de variação:")
@@ -163,7 +158,7 @@ elif st.session_state.fase == 4:
         try:
             resp = sp.sympify(normalizar(resposta))
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🧬 Reação controlada!")
+                st.success("🧬 Reação estabilizada!")
                 if st.button("➡️ Fase 5"):
                     st.session_state.fase = 5
             else:
@@ -172,7 +167,7 @@ elif st.session_state.fase == 4:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 5 — COMBINAÇÃO
+# FASE 5 — COMBINAÇÃO (nível chefe)
 # =================================================
 elif st.session_state.fase == 5:
 
@@ -181,16 +176,18 @@ elif st.session_state.fase == 5:
     st.markdown("""
     Agora todos os sistemas estão interligados:
 
-    ### S(w) = [(w² + 1)(2w)] / (w³)
+    ### S(w) = [(w² + 1) · eʷ] / sin(w)
 
-    Você precisará combinar regras  
-    (produto + quociente + simplificação).
+    Aqui você precisará combinar:
+    - Produto
+    - Quociente
+    - Cadeia
 
     Calcule a **taxa de variação completa**.
     """)
 
     w = sp.symbols('w')
-    funcao = ((w**2 + 1)*(2*w))/(w**3)
+    funcao = ((w**2 + 1)*sp.exp(w))/sp.sin(w)
     resposta_correta = sp.diff(funcao, w)
 
     resposta = st.text_input("Digite a taxa de variação final:")
@@ -199,9 +196,9 @@ elif st.session_state.fase == 5:
         try:
             resp = sp.sympify(normalizar(resposta))
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🏆 MISSÃO COMPLETA! Você domina todas as regras!")
+                st.success("🏆 MISSÃO COMPLETA! Você domina cálculo avançado!")
                 st.balloons()
             else:
-                st.error("❌ O sistema supremo ainda não está estável.")
+                st.error("❌ O sistema ainda não está estável.")
         except:
             st.error("Formato inválido.")
