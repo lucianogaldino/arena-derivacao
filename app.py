@@ -2,6 +2,12 @@ import streamlit as st
 import sympy as sp
 import re
 
+from sympy.parsing.sympy_parser import (
+    parse_expr,
+    standard_transformations,
+    implicit_multiplication_application
+)
+
 # -------------------------------------------------
 # CONFIGURAÇÃO
 # -------------------------------------------------
@@ -12,31 +18,18 @@ if "fase" not in st.session_state:
     st.session_state.fase = 1
 
 # -------------------------------------------------
-# NORMALIZAÇÃO
+# PARSER ROBUSTO (ACEITA TEXTO PLANO NATURAL)
 # -------------------------------------------------
-def normalizar(expr):
+def interpretar(expr):
     expr = expr.lower()
     expr = expr.replace("^", "**")
-
-    # corrigir sen para sin
     expr = expr.replace("sen", "sin")
 
-    # inserir * entre número e letra
-    expr = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', expr)
+    transformations = standard_transformations + (
+        implicit_multiplication_application,
+    )
 
-    # inserir * entre letra e número
-    expr = re.sub(r'([a-zA-Z])(\d)', r'\1*\2', expr)
-
-    # inserir * entre variável e função trig/exponencial
-    expr = re.sub(r'([a-zA-Z])(?=sin|cos|exp)', r'\1*', expr)
-
-    # inserir * entre ) e letra
-    expr = re.sub(r'\)([a-zA-Z])', r')*\1', expr)
-
-    # corrigir e^x para exp(x)
-    expr = re.sub(r'e\*\*(\w+)', r'exp(\1)', expr)
-
-    return expr
+    return parse_expr(expr, transformations=transformations)
 
 # -------------------------------------------------
 # SIDEBAR
@@ -50,19 +43,18 @@ if st.sidebar.button("🔄 Reiniciar Missão"):
     st.rerun()
 
 # =================================================
-# FASE 1 — DEFINIÇÃO (mais termos)
+# FASE 1 — DEFINIÇÃO
 # =================================================
 if st.session_state.fase == 1:
 
-    st.header("🧪 Fase 1 — O Núcleo Fundamental")
+    st.header("🧪 Fase 1 — Núcleo Fundamental")
 
     st.markdown("""
-    O reator central agora possui múltiplos componentes energéticos.
+    O reator central precisa de calibração manual.
 
     ### E(t) = t³ − 2t² + 5t − 7
 
-    Para ativar o núcleo manualmente,  
-    calcule a **taxa de variação usando a definição formal (limite do quociente incremental)**.
+    Calcule a **taxa de variação usando a definição formal**.
     """)
 
     t = sp.symbols('t')
@@ -73,30 +65,27 @@ if st.session_state.fase == 1:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = interpretar(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🔥 Núcleo ativado com sucesso!")
+                st.success("🔥 Núcleo ativado!")
                 if st.button("➡️ Fase 2"):
                     st.session_state.fase = 2
             else:
-                st.error("❌ Revise a aplicação da definição.")
+                st.error("❌ Revise a definição.")
         except:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 2 — PRODUTO (com trigonometria)
+# FASE 2 — PRODUTO
 # =================================================
 elif st.session_state.fase == 2:
 
     st.header("⚙️ Fase 2 — Engrenagens Trigonométricas")
 
     st.markdown("""
-    O sistema mecânico agora envolve oscilação angular.
+    ### F(x) = (x² + 1) sin(x)
 
-    ### F(x) = (x² + 1) · sin(x)
-
-    Para estabilizar o sistema,  
-    calcule a **taxa de variação usando a regra do produto**.
+    Calcule a **taxa de variação usando a regra do produto**.
     """)
 
     x = sp.symbols('x')
@@ -107,7 +96,7 @@ elif st.session_state.fase == 2:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = interpretar(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("⚙️ Engrenagens estabilizadas!")
                 if st.button("➡️ Fase 3"):
@@ -118,19 +107,16 @@ elif st.session_state.fase == 2:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 3 — QUOCIENTE (com exponencial)
+# FASE 3 — QUOCIENTE
 # =================================================
 elif st.session_state.fase == 3:
 
     st.header("🌊 Fase 3 — Fluxo Exponencial")
 
     st.markdown("""
-    O fluxo energético cresce exponencialmente.
+    ### Q(y) = e^y / (y² + 1)
 
-    ### Q(y) = eʸ / (y² + 1)
-
-    Para manter o equilíbrio,  
-    calcule a **taxa de variação usando a regra do quociente**.
+    Calcule a **taxa de variação usando a regra do quociente**.
     """)
 
     y = sp.symbols('y')
@@ -141,9 +127,9 @@ elif st.session_state.fase == 3:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = interpretar(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🌊 Fluxo controlado!")
+                st.success("🌊 Fluxo estabilizado!")
                 if st.button("➡️ Fase 4"):
                     st.session_state.fase = 4
             else:
@@ -152,15 +138,13 @@ elif st.session_state.fase == 3:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 4 — CADEIA (trig dentro)
+# FASE 4 — CADEIA
 # =================================================
 elif st.session_state.fase == 4:
 
     st.header("🧬 Fase 4 — Reação Composta")
 
     st.markdown("""
-    A reação química agora envolve composição trigonométrica.
-
     ### R(z) = cos(3z² + 2z)
 
     Calcule a **taxa de variação usando a regra da cadeia**.
@@ -174,9 +158,9 @@ elif st.session_state.fase == 4:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = interpretar(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🧬 Reação estabilizada!")
+                st.success("🧬 Reação controlada!")
                 if st.button("➡️ Fase 5"):
                     st.session_state.fase = 5
             else:
@@ -185,18 +169,16 @@ elif st.session_state.fase == 4:
             st.error("Formato inválido.")
 
 # =================================================
-# FASE 5 — COMBINAÇÃO (nível chefe)
+# FASE 5 — COMBINAÇÃO FINAL
 # =================================================
 elif st.session_state.fase == 5:
 
-    st.header("🔥 Fase Final — O Sistema Supremo")
+    st.header("🔥 Fase Final — Sistema Supremo")
 
     st.markdown("""
-    Agora todos os sistemas estão interligados:
+    ### S(w) = [(w² + 1) e^w] / sin(w)
 
-    ### S(w) = [(w² + 1) · eʷ] / sin(w)
-
-    Aqui você precisará combinar:
+    Combine:
     - Produto
     - Quociente
     - Cadeia
@@ -212,7 +194,7 @@ elif st.session_state.fase == 5:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = interpretar(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("🏆 MISSÃO COMPLETA! Você domina cálculo avançado!")
                 st.balloons()
