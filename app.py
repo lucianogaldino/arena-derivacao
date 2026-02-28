@@ -3,20 +3,16 @@ import sympy as sp
 import re
 
 # -------------------------------------------------
-# CONFIGURAÇÃO INICIAL
+# CONFIGURAÇÃO
 # -------------------------------------------------
 st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔️")
-
 st.title("⚔️ Guardiões da Taxa de Variação")
 
-# -------------------------------------------------
-# ESTADO DA MISSÃO
-# -------------------------------------------------
 if "fase" not in st.session_state:
     st.session_state.fase = 1
 
 # -------------------------------------------------
-# FUNÇÃO PARA NORMALIZAR EXPRESSÃO DO ALUNO
+# NORMALIZAÇÃO
 # -------------------------------------------------
 def normalizar(expr):
     expr = expr.replace("^", "**")
@@ -25,137 +21,187 @@ def normalizar(expr):
     return expr
 
 # -------------------------------------------------
-# BARRA LATERAL
+# SIDEBAR
 # -------------------------------------------------
-st.sidebar.title("📊 Progresso da Missão")
-st.sidebar.progress(st.session_state.fase / 3)
-st.sidebar.write(f"Fase atual: {st.session_state.fase}/3")
+st.sidebar.title("📊 Progresso")
+st.sidebar.progress(st.session_state.fase / 5)
+st.sidebar.write(f"Fase {st.session_state.fase} de 5")
 
 if st.sidebar.button("🔄 Reiniciar Missão"):
     st.session_state.fase = 1
     st.rerun()
 
-# -------------------------------------------------
-# FASE 1
-# -------------------------------------------------
+# =================================================
+# FASE 1 — DEFINIÇÃO
+# =================================================
 if st.session_state.fase == 1:
 
-    st.header("🧪 Fase 1 — O Reator de Chronópolis")
+    st.header("🧪 Fase 1 — Núcleo Fundamental")
 
     st.markdown("""
-    A cidade futurista **Chronópolis** depende de um reator experimental.
+    O reator central de Chronópolis precisa de calibração manual.
 
-    A energia liberada é descrita por:
+    A energia é descrita por:
 
-    ### 🔋 E(t) = 6t⁴ − 3t² + 8t
+    ### E(t) = t² + 3t
 
-    Para estabilizar o núcleo, você precisa determinar a  
-    **taxa de variação instantânea da energia em relação ao tempo t**.
+    ⚠️ Para ativar o núcleo, você deve calcular a  
+    **taxa de variação usando a definição formal (limite do quociente incremental)**.
 
-    Se errar, o reator ficará instável!
+    Determine a taxa de variação final simplificada.
     """)
 
     t = sp.symbols('t')
-    funcao = 6*t**4 - 3*t**2 + 8*t
+    funcao = t**2 + 3*t
     resposta_correta = sp.diff(funcao, t)
 
-    resposta_usuario = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:")
 
-    if resposta_usuario:
+    if resposta:
         try:
-            resposta_formatada = normalizar(resposta_usuario)
-            resposta_usuario_expr = sp.sympify(resposta_formatada)
-
-            if sp.simplify(resposta_usuario_expr - resposta_correta) == 0:
-                st.success("🔥 Reator estabilizado! Chronópolis está salva!")
-
-                if st.button("➡️ Avançar para Fase 2"):
+            resp = sp.sympify(normalizar(resposta))
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.success("🔥 Núcleo ativado por definição!")
+                if st.button("➡️ Fase 2"):
                     st.session_state.fase = 2
-
             else:
-                st.error("⚠️ Instabilidade detectada! Revise seus cálculos.")
-
+                st.error("⚠️ A definição não foi aplicada corretamente.")
         except:
-            st.error("Formato inválido! Use apenas expressões matemáticas.")
+            st.error("Formato inválido.")
 
-# -------------------------------------------------
-# FASE 2
-# -------------------------------------------------
+# =================================================
+# FASE 2 — PRODUTO
+# =================================================
 elif st.session_state.fase == 2:
 
-    st.header("🚀 Fase 2 — Propulsão Orbital")
+    st.header("⚙️ Fase 2 — Engrenagens Sincronizadas")
 
     st.markdown("""
-    Uma nave interplanetária precisa ajustar sua trajetória.
+    O sistema mecânico depende de duas forças multiplicadas:
 
-    A posição é dada por:
+    ### F(x) = (x² + 1)(3x)
 
-    ### 🛰️ S(v) = 5v³ − 2v² + 4v
-
-    Para ativar os propulsores, determine a  
-    **taxa de variação da posição em relação à variável v**.
+    Para manter as engrenagens funcionando,  
+    calcule a **taxa de variação usando a regra do produto**.
     """)
 
-    v = sp.symbols('v')
-    funcao = 5*v**3 - 2*v**2 + 4*v
-    resposta_correta = sp.diff(funcao, v)
+    x = sp.symbols('x')
+    funcao = (x**2 + 1)*(3*x)
+    resposta_correta = sp.diff(funcao, x)
 
-    resposta_usuario = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:")
 
-    if resposta_usuario:
+    if resposta:
         try:
-            resposta_formatada = normalizar(resposta_usuario)
-            resposta_usuario_expr = sp.sympify(resposta_formatada)
-
-            if sp.simplify(resposta_usuario_expr - resposta_correta) == 0:
-                st.success("🚀 Propulsão ativada! A nave escapou da órbita!")
-
-                if st.button("➡️ Avançar para Fase 3"):
+            resp = sp.sympify(normalizar(resposta))
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.success("⚙️ Engrenagens sincronizadas!")
+                if st.button("➡️ Fase 3"):
                     st.session_state.fase = 3
-
             else:
-                st.error("❌ Falha nos motores! Revise sua taxa de variação.")
-
+                st.error("❌ Revise a regra do produto.")
         except:
-            st.error("Formato inválido! Use apenas expressões matemáticas.")
+            st.error("Formato inválido.")
 
-# -------------------------------------------------
-# FASE 3
-# -------------------------------------------------
+# =================================================
+# FASE 3 — QUOCIENTE
+# =================================================
 elif st.session_state.fase == 3:
 
-    st.header("🌋 Fase 3 — O Vulcão da Energia Crescente")
+    st.header("🌊 Fase 3 — Fluxo Dividido")
 
     st.markdown("""
-    Um vulcão energético está acumulando pressão.
+    O fluxo de energia agora é dado por:
 
-    A intensidade da pressão é modelada por:
+    ### Q(y) = (2y³ + 1) / (y)
 
-    ### 🌋 P(r) = 7r⁵ − 4r³ + 2r
-
-    Para prever a explosão, calcule a  
-    **taxa de variação da pressão em relação à variável r**.
-
-    O destino da civilização depende de você!
+    Para equilibrar o sistema hidráulico,  
+    determine a **taxa de variação usando a regra do quociente**.
     """)
 
-    r = sp.symbols('r')
-    funcao = 7*r**5 - 4*r**3 + 2*r
-    resposta_correta = sp.diff(funcao, r)
+    y = sp.symbols('y')
+    funcao = (2*y**3 + 1)/y
+    resposta_correta = sp.diff(funcao, y)
 
-    resposta_usuario = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:")
 
-    if resposta_usuario:
+    if resposta:
         try:
-            resposta_formatada = normalizar(resposta_usuario)
-            resposta_usuario_expr = sp.sympify(resposta_formatada)
-
-            if sp.simplify(resposta_usuario_expr - resposta_correta) == 0:
-                st.success("🏆 MISSÃO CONCLUÍDA! Você é um Guardião da Taxa de Variação!")
-                st.balloons()
-
+            resp = sp.sympify(normalizar(resposta))
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.success("🌊 Fluxo estabilizado!")
+                if st.button("➡️ Fase 4"):
+                    st.session_state.fase = 4
             else:
-                st.error("🌋 A pressão aumentou! Revise seus cálculos.")
-
+                st.error("❌ Revise a regra do quociente.")
         except:
-            st.error("Formato inválido! Use apenas expressões matemáticas.")
+            st.error("Formato inválido.")
+
+# =================================================
+# FASE 4 — CADEIA
+# =================================================
+elif st.session_state.fase == 4:
+
+    st.header("🧬 Fase 4 — Reação em Cadeia")
+
+    st.markdown("""
+    A reação química depende de uma função dentro de outra:
+
+    ### R(z) = (4z² + 1)³
+
+    Para controlar a reação,  
+    calcule a **taxa de variação usando a regra da cadeia**.
+    """)
+
+    z = sp.symbols('z')
+    funcao = (4*z**2 + 1)**3
+    resposta_correta = sp.diff(funcao, z)
+
+    resposta = st.text_input("Digite a taxa de variação:")
+
+    if resposta:
+        try:
+            resp = sp.sympify(normalizar(resposta))
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.success("🧬 Reação controlada!")
+                if st.button("➡️ Fase 5"):
+                    st.session_state.fase = 5
+            else:
+                st.error("❌ Revise a regra da cadeia.")
+        except:
+            st.error("Formato inválido.")
+
+# =================================================
+# FASE 5 — COMBINAÇÃO
+# =================================================
+elif st.session_state.fase == 5:
+
+    st.header("🔥 Fase Final — O Sistema Supremo")
+
+    st.markdown("""
+    Agora todos os sistemas estão interligados:
+
+    ### S(w) = [(w² + 1)(2w)] / (w³)
+
+    Você precisará combinar regras  
+    (produto + quociente + simplificação).
+
+    Calcule a **taxa de variação completa**.
+    """)
+
+    w = sp.symbols('w')
+    funcao = ((w**2 + 1)*(2*w))/(w**3)
+    resposta_correta = sp.diff(funcao, w)
+
+    resposta = st.text_input("Digite a taxa de variação final:")
+
+    if resposta:
+        try:
+            resp = sp.sympify(normalizar(resposta))
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.success("🏆 MISSÃO COMPLETA! Você domina todas as regras!")
+                st.balloons()
+            else:
+                st.error("❌ O sistema supremo ainda não está estável.")
+        except:
+            st.error("Formato inválido.")
