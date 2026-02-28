@@ -15,9 +15,27 @@ if "fase" not in st.session_state:
 # NORMALIZAÇÃO
 # -------------------------------------------------
 def normalizar(expr):
+    expr = expr.lower()
     expr = expr.replace("^", "**")
+
+    # corrigir sen para sin
+    expr = expr.replace("sen", "sin")
+
+    # inserir * entre número e letra
     expr = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', expr)
+
+    # inserir * entre letra e número
     expr = re.sub(r'([a-zA-Z])(\d)', r'\1*\2', expr)
+
+    # inserir * entre variável e função trig/exponencial
+    expr = re.sub(r'([a-zA-Z])(?=sin|cos|exp)', r'\1*', expr)
+
+    # inserir * entre ) e letra
+    expr = re.sub(r'\)([a-zA-Z])', r')*\1', expr)
+
+    # corrigir e^x para exp(x)
+    expr = re.sub(r'e\*\*(\w+)', r'exp(\1)', expr)
+
     return expr
 
 # -------------------------------------------------
