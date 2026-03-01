@@ -55,7 +55,7 @@ if st.session_state.fase == 1:
     funcao = t**3 - 2*t**2 + 5*t - 7
     resposta_correta = sp.diff(funcao, t)
 
-    resposta = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:", key="fase1")
 
     if resposta:
         try:
@@ -64,6 +64,8 @@ if st.session_state.fase == 1:
                 st.success("🔥 Núcleo ativado com sucesso!")
                 if st.button("➡️ Fase 2"):
                     st.session_state.fase = 2
+                    st.session_state["fase1"] = ""  # limpa o campo
+                    st.rerun()
             else:
                 st.error("❌ Revise a aplicação da definição.")
         except:
@@ -85,7 +87,7 @@ elif st.session_state.fase == 2:
     funcao = (x**2 + 1)*sp.sin(x)
     resposta_correta = sp.diff(funcao, x)
 
-    resposta = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:", key="fase2")
 
     if resposta:
         try:
@@ -94,6 +96,8 @@ elif st.session_state.fase == 2:
                 st.success("⚙️ Engrenagens estabilizadas!")
                 if st.button("➡️ Fase 3"):
                     st.session_state.fase = 3
+                    st.session_state["fase2"] = ""  # limpa o campo
+                    st.rerun()
             else:
                 st.error("❌ Revise a regra do produto.")
         except:
@@ -115,7 +119,7 @@ elif st.session_state.fase == 3:
     funcao = sp.exp(y)/(y**2 + 1)
     resposta_correta = sp.diff(funcao, y)
 
-    resposta = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:", key="fase3")
 
     if resposta:
         try:
@@ -124,6 +128,8 @@ elif st.session_state.fase == 3:
                 st.success("🌊 Fluxo controlado!")
                 if st.button("➡️ Fase 4"):
                     st.session_state.fase = 4
+                    st.session_state["fase3"] = ""  # limpa o campo
+                    st.rerun()
             else:
                 st.error("❌ Revise a regra do quociente.")
         except:
@@ -145,7 +151,7 @@ elif st.session_state.fase == 4:
     funcao = sp.cos(3*z**2 + 2*z)
     resposta_correta = sp.diff(funcao, z)
 
-    resposta = st.text_input("Digite a taxa de variação:")
+    resposta = st.text_input("Digite a taxa de variação:", key="fase4")
 
     if resposta:
         try:
@@ -154,6 +160,8 @@ elif st.session_state.fase == 4:
                 st.success("🧬 Reação estabilizada!")
                 if st.button("➡️ Fase 5"):
                     st.session_state.fase = 5
+                    st.session_state["fase4"] = ""  # limpa o campo
+                    st.rerun()
             else:
                 st.error("❌ Revise a regra da cadeia.")
         except:
@@ -175,13 +183,13 @@ elif st.session_state.fase == 5:
     funcao = ((w**2 + 1)*sp.exp(w))/sp.sin(w)
     resposta_correta = sp.diff(funcao, w)
 
-    resposta = st.text_input("Digite a taxa de variação final:")
+    resposta = st.text_input("Digite a taxa de variação:", key="fase2")
 
     if resposta:
         try:
             resp = converter_resposta(resposta)
             if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🏆 MISSÃO COMPLETA! Você domina cálculo avançado!")
+                st.success("🏆 MISSÃO COMPLETA! Você sabe tudo de derivadas!")
                 st.balloons()
             else:
                 st.error("❌ O sistema ainda não está estável.")
