@@ -163,7 +163,7 @@ elif st.session_state.fase == 3:
 
 Ele cresce rapidamente, obedecendo a função abaixo, e pode causar sobrecarga.
 
-Determine a função que determina como essa intensidade varia para controlar o fluxo e avançar.
+Determine a função que indique como essa intensidade varia para controlar o fluxo e conseguir avançar.
 
 Q(y) = eʸ / (y² + 1)    """)
 
