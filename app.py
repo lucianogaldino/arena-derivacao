@@ -76,13 +76,13 @@ if st.session_state.fase == 1:
 
 A energia armazenada depende do tempo, conforme função abaixo, e está crescendo perigosamente.
 
-Seu objetivo: determinar como essa energia varia instantaneamente, calculando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
+Seu objetivo: determinar como essa energia varia instantaneamente, indicando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
 
 E(t) = t³ − 2t² + 5t − 7
     """)
 
     resposta = st.text_input(
-        "Digite a taxa de variação:",
+        "Digite a solução encontrada:",
         key=f"fase1_{st.session_state.fase}"
     )
 
@@ -125,7 +125,7 @@ Para restaurar o equilíbrio e reativar as engrenagens, descubra como essa grand
 F(x) = (x² + 1) · sin(x)    """)
 
     resposta = st.text_input(
-        "Digite a taxa de variação:",
+        "Digite a solução encontrada:",
         key=f"fase2_{st.session_state.fase}"
     )
 
@@ -168,7 +168,7 @@ Determine a função que determina como essa intensidade varia para controlar o 
 Q(y) = eʸ / (y² + 1)    """)
 
     resposta = st.text_input(
-        "Digite a taxa de variação:",
+        "Digite a solução encontrada:",
         key=f"fase3_{st.session_state.fase}"
     )
 
@@ -211,7 +211,7 @@ Analise como essa função varia e estabilize a reação.
 R(z) = cos(3z² + 2z) """)
 
     resposta = st.text_input(
-        "Digite a taxa de variação:",
+        "Digite a solução encontrada:",
         key=f"fase4_{st.session_state.fase}"
     )
 
@@ -256,7 +256,7 @@ Se conseguir, a missão será concluída!!!Boa Sorte!!!
 S(w) = [(w² + 1) · eʷ] / sin(w)    """)
 
     resposta = st.text_input(
-        "Digite a taxa de variação final:",
+        "Digite a solução encontrada:",
         key=f"fase5_{st.session_state.fase}"
     )
 
