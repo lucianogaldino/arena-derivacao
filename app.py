@@ -42,11 +42,7 @@ if st.sidebar.button("🔄 Reiniciar Missão"):
     st.session_state.fase = 1
     st.session_state.validado = False
 
-    # Limpa apenas os campos que existirem
-    for key in ["fase1", "fase2", "fase3", "fase4", "fase5"]:
-        if key in st.session_state:
-            st.session_state[key] = ""
-
+    # Apenas reinicia o app corretamente
     st.rerun()
 
 # =================================================
