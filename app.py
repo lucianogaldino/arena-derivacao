@@ -116,9 +116,13 @@ elif st.session_state.fase == 2:
     resposta_correta = sp.diff(funcao, x)
 
     st.markdown("""
-    ### F(x) = (x² + 1) · sin(x)
-    Calcule usando a regra do produto.
-    """)
+⚙️ Engrenagens mecânicas começaram a oscilar.
+
+O movimento depende de dois sistemas interligados e obedece a função abaixo.
+
+Para restaurar o equilíbrio e reativar as engrenagens, descubra como essa grandeza varia no instante atual.
+
+F(x) = (x² + 1) · sin(x)    """)
 
     resposta = st.text_input(
         "Digite a taxa de variação:",
