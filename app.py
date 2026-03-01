@@ -41,7 +41,12 @@ st.sidebar.write(f"Fase {st.session_state.fase} de 5")
 if st.sidebar.button("🔄 Reiniciar Missão"):
     st.session_state.fase = 1
     st.session_state.validado = False
-    st.session_state.clear()
+
+    # Limpa apenas os campos das fases
+    for key in ["fase1", "fase2", "fase3", "fase4", "fase5"]:
+        if key in st.session_state:
+            st.session_state[key] = ""
+
     st.rerun()
 
 # =================================================
