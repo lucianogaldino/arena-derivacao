@@ -77,7 +77,8 @@ if st.session_state.fase == 1:
 A energia armazenada depende do tempo, conforme função abaixo, e está crescendo perigosamente.
 
 Seu objetivo: determinar como essa energia varia instantaneamente, calculando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
-    ### E(t) = t³ − 2t² + 5t − 7
+
+E(t) = t³ − 2t² + 5t − 7
     """)
 
     resposta = st.text_input(
