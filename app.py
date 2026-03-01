@@ -24,6 +24,23 @@ def converter_resposta(resposta):
 # =================================================
 st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔️")
 st.title("⚔️ Guardiões da Taxa de Variação — Nível Avançado")
+st.markdown("""
+# 🌌 Bem-vindo ao Laboratório da Taxa de Variação
+
+Um sistema energético avançado entrou em colapso...
+
+Para estabilizar cada núcleo, você precisará calcular a **taxa de variação** das funções apresentadas.
+
+⚙️ Para escrever as expressões use:
+
+- Multiplicação → `*`
+- Potência → `**`
+- Divisão → `/`
+- Funções trigonométricas → `sin(x)`, `cos(x)`
+- Exponencial → `e` (representa a constante de Euler)
+
+💡 Digite sua resposta em formato matemático e avance pelas fases.
+""")
 
 if "fase" not in st.session_state:
     st.session_state.fase = 1
@@ -55,8 +72,12 @@ if st.session_state.fase == 1:
     resposta_correta = sp.diff(funcao, t)
 
     st.markdown("""
+🛰 Um núcleo primário está instável.
+
+A energia armazenada depende do tempo, conforme função abaixo, e está crescendo perigosamente.
+
+Seu objetivo: determinar como essa energia varia instantaneamente, calculando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
     ### E(t) = t³ − 2t² + 5t − 7
-    Calcule a taxa de variação.
     """)
 
     resposta = st.text_input(
