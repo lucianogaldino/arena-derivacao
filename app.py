@@ -55,7 +55,7 @@ if st.session_state.fase == 1:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = sp.sympify(normalizar(resposta), locals={"e": sp.E})
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("🔥 Núcleo ativado com sucesso!")
                 if st.button("➡️ Fase 2"):
@@ -89,7 +89,7 @@ elif st.session_state.fase == 2:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = sp.sympify(normalizar(resposta), locals={"e": sp.E})
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("⚙️ Engrenagens estabilizadas!")
                 if st.button("➡️ Fase 3"):
@@ -123,7 +123,7 @@ elif st.session_state.fase == 3:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = sp.sympify(normalizar(resposta), locals={"e": sp.E})
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("🌊 Fluxo controlado!")
                 if st.button("➡️ Fase 4"):
@@ -156,7 +156,7 @@ elif st.session_state.fase == 4:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = sp.sympify(normalizar(resposta), locals={"e": sp.E})
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("🧬 Reação estabilizada!")
                 if st.button("➡️ Fase 5"):
@@ -194,7 +194,7 @@ elif st.session_state.fase == 5:
 
     if resposta:
         try:
-            resp = sp.sympify(normalizar(resposta))
+            resp = sp.sympify(normalizar(resposta), locals={"e": sp.E})
             if sp.simplify(resp - resposta_correta) == 0:
                 st.success("🏆 MISSÃO COMPLETA! Você domina cálculo avançado!")
                 st.balloons()
