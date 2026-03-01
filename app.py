@@ -116,11 +116,9 @@ elif st.session_state.fase == 2:
     resposta_correta = sp.diff(funcao, x)
 
     st.markdown("""
-⚙️ Engrenagens mecânicas começaram a oscilar.
+⚙️ No setor de acionamentos mecânicos as engrenagens começaram a oscilar. O movimento depende de dois sistemas interligados e obedece a função abaixo.
 
-O movimento depende de dois sistemas interligados e obedece a função abaixo.
-
-Para restaurar o equilíbrio e reativar as engrenagens, descubra como essa grandeza varia no instante atual.
+Para restaurar o equilíbrio e reativar as engrenagens, é necessário descobrir como essa grandeza varia no instante atual e digitar no sistema a função encontrada para regularizar as oscilações.
 
 F(x) = (x² + 1) · sin(x)    """)
 
@@ -161,9 +159,9 @@ elif st.session_state.fase == 3:
     st.markdown("""
 🌊 Um fluxo energético atravessa o sistema central.
 
-Ele cresce rapidamente, obedecendo a função abaixo, e pode causar sobrecarga.
+Ele cresce rapidamente, obedecendo a função abaixo, e se não for controlado pode causar sobrecarga.
 
-Determine a função que indique como essa intensidade varia para controlar o fluxo e conseguir avançar.
+Determine a função que indique como essa intensidade varia para controlar a emissão desse fluxo e, assim, conseguir avançar.
 
 Q(y) = eʸ / (y² + 1)    """)
 
@@ -202,11 +200,11 @@ elif st.session_state.fase == 4:
     resposta_correta = sp.diff(funcao, z)
 
     st.markdown("""
-🧬 Um processo de transformação química está ocorrendo.
+🧬 No sistema secundário está ocorrendo um processo de transformação química.
 
-A reação depende de uma composição interna complexa, conforme função abaixo.
+A reação depende de uma composição interna complexa, dada pela função abaixo.
 
-Analise como essa função varia e estabilize a reação.
+Analise como essa função varia e estabilize a reação cadastrando o resultado no sistema de controle.
 
 R(z) = cos(3z² + 2z) """)
 
@@ -247,7 +245,7 @@ elif st.session_state.fase == 5:
     st.markdown("""
 🔥 SISTEMA SUPREMO ATIVADO
 
-Todos os módulos estão conectados.
+Todos os módulos estão conectados. Isso é sinal de catástrofe!
 
 Agora você precisa calcular como o sistema completo, dado pela função abaixo, varia para impedir o colapso total.
 
