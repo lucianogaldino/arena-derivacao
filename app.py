@@ -159,9 +159,13 @@ elif st.session_state.fase == 3:
     resposta_correta = sp.diff(funcao, y)
 
     st.markdown("""
-    ### Q(y) = eʸ / (y² + 1)
-    Regra do quociente.
-    """)
+🌊 Um fluxo energético atravessa o sistema central.
+
+Ele cresce rapidamente, obedecendo a função abaixo, e pode causar sobrecarga.
+
+Determine a função que determina como essa intensidade varia para controlar o fluxo e avançar.
+
+Q(y) = eʸ / (y² + 1)    """)
 
     resposta = st.text_input(
         "Digite a taxa de variação:",
@@ -198,9 +202,13 @@ elif st.session_state.fase == 4:
     resposta_correta = sp.diff(funcao, z)
 
     st.markdown("""
-    ### R(z) = cos(3z² + 2z)
-    Regra da cadeia.
-    """)
+🧬 Um processo de transformação química está ocorrendo.
+
+A reação depende de uma composição interna complexa, conforme função abaixo.
+
+Analise como essa função varia e estabilize a reação.
+
+R(z) = cos(3z² + 2z) """)
 
     resposta = st.text_input(
         "Digite a taxa de variação:",
@@ -237,9 +245,15 @@ elif st.session_state.fase == 5:
     resposta_correta = sp.diff(funcao, w)
 
     st.markdown("""
-    ### S(w) = [(w² + 1) · eʷ] / sin(w)
-    Combine produto, quociente e cadeia.
-    """)
+🔥 SISTEMA SUPREMO ATIVADO
+
+Todos os módulos estão conectados.
+
+Agora você precisa calcular como o sistema completo, dado pela função abaixo, varia para impedir o colapso total.
+
+Se conseguir, a missão será concluída!!!Boa Sorte!!!
+
+S(w) = [(w² + 1) · eʷ] / sin(w)    """)
 
     resposta = st.text_input(
         "Digite a taxa de variação final:",
