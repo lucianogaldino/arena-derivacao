@@ -70,6 +70,7 @@ if st.sidebar.button("🔄 Reiniciar Missão"):
     st.session_state.fase = 1
     st.session_state.validado = False
     st.session_state.pontos = 100
+    st.session_state.pontuacao_final_calculada = False  # 👈 ADICIONE ESTA LINHA
     st.rerun()
 
 # =================================================
