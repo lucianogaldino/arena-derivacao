@@ -247,23 +247,32 @@ S(w) = [(w² + 1) · eʷ] / sin(w)
 Boa sorte!!!
 """)
 
-    resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
-    confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
+    resposta = st.text_input(
+        "Digite a solução encontrada:",
+        key="f5_input",
+        disabled=st.session_state.finalizou
+    )
 
+    confirmar = st.button(
+        "🔥 Impedir Colapso",
+        key="f5_btn",
+        disabled=st.session_state.finalizou
+    )
+
+    # Só entra aqui se ainda não finalizou
     if confirmar and not st.session_state.finalizou:
+
         try:
             resp = converter_resposta(resposta)
 
             if sp.simplify(resp - resposta_correta) == 0:
 
-                # 🔥 DOBRA IMEDIATAMENTE
+                # 🔥 DOBRA A PONTUAÇÃO IMEDIATAMENTE
                 st.session_state.pontos *= 2
                 st.session_state.finalizou = True
 
                 st.success("🏆 MISSÃO COMPLETA!")
                 st.balloons()
-
-                st.rerun()  # força atualização sem precisar clicar novamente
 
             else:
                 st.error("❌ Resposta incorreta.")
@@ -273,6 +282,6 @@ Boa sorte!!!
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
-    # Se já finalizou, apenas mostra o resultado
+    # Se já finalizou, apenas mostra mensagem final
     if st.session_state.finalizou:
         st.success("🏆 MISSÃO COMPLETA!")
