@@ -26,9 +26,7 @@ st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔
 st.title("⚔️ Guardiões da Taxa de Variação — Nível Avançado")
 
 st.markdown("""
-# 🌌 Bem-vindo ao Laboratório da Taxa de Variação
-
-Para estabilizar cada núcleo, você precisará calcular a **derivada** das funções apresentadas.
+Calcule a **derivada** da função apresentada.
 
 Use:
 - Multiplicação → `*`
@@ -60,7 +58,7 @@ if st.sidebar.button("🔄 Reiniciar Missão"):
     st.rerun()
 
 # =================================================
-# FUNÇÃO PADRÃO DE VALIDAÇÃO
+# FUNÇÃO DE VALIDAÇÃO
 # =================================================
 def validar_resposta(resposta, resposta_correta, mensagem_sucesso):
     try:
@@ -86,9 +84,8 @@ if st.session_state.fase == 1:
 
     st.write("E(t) = t³ − 2t² + 5t − 7")
 
-    with st.form("form_fase1"):
-        resposta = st.text_input("Digite a solução encontrada:")
-        confirmar = st.form_submit_button("⚔️ Estabilizar Núcleo")
+    resposta = st.text_input("Digite a solução encontrada:", key="f1_input")
+    confirmar = st.button("⚔️ Confirmar Resposta", key="f1_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🔥 Núcleo ativado com sucesso!")
@@ -110,11 +107,10 @@ elif st.session_state.fase == 2:
     funcao = (x**2 + 1) * sp.sin(x)
     resposta_correta = sp.diff(funcao, x)
 
-    st.write("F(x) = (x² + 1) · sin(x)")
+    st.write("F(x) = (x² + 1)·sin(x)")
 
-    with st.form("form_fase2"):
-        resposta = st.text_input("Digite a solução encontrada:")
-        confirmar = st.form_submit_button("⚙️ Regular Oscilação")
+    resposta = st.text_input("Digite a solução encontrada:", key="f2_input")
+    confirmar = st.button("⚙️ Confirmar Resposta", key="f2_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "⚙️ Engrenagens estabilizadas!")
@@ -138,9 +134,8 @@ elif st.session_state.fase == 3:
 
     st.write("Q(y) = eʸ / (y² + 1)")
 
-    with st.form("form_fase3"):
-        resposta = st.text_input("Digite a solução encontrada:")
-        confirmar = st.form_submit_button("🌊 Controlar Fluxo")
+    resposta = st.text_input("Digite a solução encontrada:", key="f3_input")
+    confirmar = st.button("🌊 Confirmar Resposta", key="f3_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🌊 Fluxo controlado!")
@@ -164,9 +159,8 @@ elif st.session_state.fase == 4:
 
     st.write("R(z) = cos(3z² + 2z)")
 
-    with st.form("form_fase4"):
-        resposta = st.text_input("Digite a solução encontrada:")
-        confirmar = st.form_submit_button("🧬 Estabilizar Reação")
+    resposta = st.text_input("Digite a solução encontrada:", key="f4_input")
+    confirmar = st.button("🧬 Confirmar Resposta", key="f4_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🧬 Reação estabilizada!")
@@ -188,11 +182,10 @@ elif st.session_state.fase == 5:
     funcao = ((w**2 + 1) * sp.exp(w)) / sp.sin(w)
     resposta_correta = sp.diff(funcao, w)
 
-    st.write("S(w) = [(w² + 1) · eʷ] / sin(w)")
+    st.write("S(w) = [(w² + 1)·eʷ] / sin(w)")
 
-    with st.form("form_fase5"):
-        resposta = st.text_input("Digite a solução encontrada:")
-        confirmar = st.form_submit_button("🔥 Impedir Colapso")
+    resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
+    confirmar = st.button("🔥 Confirmar Resposta", key="f5_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🏆 MISSÃO COMPLETA!")
