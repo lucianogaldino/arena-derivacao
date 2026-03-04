@@ -41,6 +41,9 @@ Para estabilizar cada núcleo, você precisará calcular a **taxa de variação*
 - Exponencial → `e` (representa a constante de Euler)
 
 💡 Digite sua resposta em formato matemático e avance pelas fases.
+
+Em cada mudança de fase você ganhará 100 pontos, mas cada erro fará com que você perca 10 pontos! Porém, se concluir a fase final sua pontuação dobrará!
+Está preparado para a missão? Então, boa sorte!
 """)
 
 # =================================================
