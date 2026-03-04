@@ -1,251 +1,254 @@
 import streamlit as st
 import sympy as sp
+from sympy.parsing.sympy_parser import (
+    parse_expr,
+    standard_transformations,
+    implicit_multiplication_application
+)
 
-st.set_page_config(page_title="Missão Derivadas", page_icon="🚀")
+# =================================================
+# CONFIGURAÇÃO DO PARSER
+# =================================================
+transformations = standard_transformations + (implicit_multiplication_application,)
 
-# =====================================================
-# INICIALIZAÇÃO DO SESSION STATE
-# =====================================================
+def converter_resposta(resposta):
+    resposta = resposta.replace("^", "**")
+    return parse_expr(
+        resposta,
+        transformations=transformations,
+        local_dict={"e": sp.E}
+    )
+
+# =================================================
+# CONFIGURAÇÃO GERAL
+# =================================================
+st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔️")
+st.title("⚔️ Guardiões da Taxa de Variação — Nível Avançado")
+
+st.markdown("""
+# 🌌 Bem-vindo ao Laboratório da Taxa de Variação
+
+Um sistema energético avançado entrou em colapso...
+
+Para estabilizar cada núcleo, você precisará calcular a **taxa de variação** das funções apresentadas.
+
+⚙️ Para escrever as expressões use:
+
+- Multiplicação → `*`
+- Potência → `**`
+- Divisão → `/`
+- Funções trigonométricas → `sin(x)`, `cos(x)`
+- Exponencial → `e` (representa a constante de Euler)
+
+💡 Digite sua resposta em formato matemático e avance pelas fases.
+""")
+
+# =================================================
+# SESSION STATE
+# =================================================
 if "fase" not in st.session_state:
     st.session_state.fase = 1
-
-if "pontos" not in st.session_state:
-    st.session_state.pontos = 100
 
 if "validado" not in st.session_state:
     st.session_state.validado = False
 
-if "pontuacao_final_calculada" not in st.session_state:
-    st.session_state.pontuacao_final_calculada = False
+if "pontos" not in st.session_state:
+    st.session_state.pontos = 100  # começa com 100 pontos
 
+# =================================================
+# SIDEBAR
+# =================================================
+st.sidebar.title("📊 Progresso")
+st.sidebar.progress(st.session_state.fase / 5)
+st.sidebar.write(f"Fase {st.session_state.fase} de 5")
 
-# =====================================================
-# FUNÇÃO AUXILIAR
-# =====================================================
-def converter_resposta(expr):
-    return sp.sympify(expr.replace("^", "**"))
+st.sidebar.markdown("---")
+st.sidebar.subheader("🏆 Pontuação")
+st.sidebar.write(f"**{st.session_state.pontos} pontos**")
 
+if st.sidebar.button("🔄 Reiniciar Missão"):
+    st.session_state.fase = 1
+    st.session_state.validado = False
+    st.session_state.pontos = 100
+    st.rerun()
 
-# =====================================================
-# TOPO DO APP
-# =====================================================
-st.title("🚀 Missão: Salvar o Sistema das Derivadas")
+# =================================================
+# FUNÇÃO DE VALIDAÇÃO
+# =================================================
+def validar_resposta(resposta, resposta_correta, mensagem_sucesso):
+    try:
+        resp = converter_resposta(resposta)
+        if sp.simplify(resp - resposta_correta) == 0:
+            st.success(mensagem_sucesso)
+            st.session_state.validado = True
+        else:
+            st.error("❌ Resposta incorreta.")
+            st.session_state.pontos -= 10  # perde 10 por erro
+    except:
+        st.error("⚠️ Expressão inválida.")
+        st.session_state.pontos -= 10  # também perde se expressão for inválida
 
-col1, col2 = st.columns([3,1])
+# =================================================
+# MODELO DE FASE (mantido igual, só adicionando bônus)
+# =================================================
 
-with col1:
-    st.markdown(f"### 🎯 Pontuação Atual: {st.session_state.pontos} pontos")
+def avancar_fase(proxima):
+    st.session_state.fase = proxima
+    st.session_state.validado = False
+    st.session_state.pontos += 100  # ganha 100 ao avançar
+    st.rerun()
 
-with col2:
-    if st.button("🔄 Reiniciar Missão"):
-        st.session_state.fase = 1
-        st.session_state.pontos = 100
-        st.session_state.validado = False
-        st.session_state.pontuacao_final_calculada = False
-        st.rerun()
-
-st.markdown("---")
-
-
-# =====================================================
+# =================================================
 # FASE 1
-# =====================================================
+# =================================================
 if st.session_state.fase == 1:
 
-    st.header("🟢 Fase 1 — Sistema Linear Inicial")
+    st.header("🧪 Fase 1 — O Núcleo Fundamental")
 
-    x = sp.symbols("x")
-    resposta_correta = sp.diff(3*x**2 + 2*x, x)
+    t = sp.symbols('t')
+    funcao = t**3 - 2*t**2 + 5*t - 7
+    resposta_correta = sp.diff(funcao, t)
 
     st.markdown("""
-O sistema principal foi iniciado.
+🛰 Um núcleo primário está instável.
 
-Você precisa calcular a taxa de variação da função:
+A energia armazenada depende do tempo, conforme função abaixo, e está crescendo perigosamente.
 
-f(x) = 3x² + 2x
+Seu objetivo: determinar como essa energia varia instantaneamente, indicando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
+
+E(t) = t³ − 2t² + 5t − 7
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f1")
+    resposta = st.text_input("Digite a solução encontrada:", key="f1_input")
+    confirmar = st.button("⚔️ Estabilizar Núcleo", key="f1_btn")
 
-    if st.button("Confirmar", key="b1"):
-        try:
-            resp = converter_resposta(resposta)
+    if confirmar and not st.session_state.validado:
+        validar_resposta(resposta, resposta_correta, "🔥 Núcleo ativado com sucesso!")
 
-            if sp.simplify(resp - resposta_correta) == 0:
-                st.success("✅ Correto! Avançando de fase.")
-                st.session_state.pontos += 100
-                st.session_state.fase = 2
-                st.rerun()
-            else:
-                st.error("❌ Incorreto.")
-                st.session_state.pontos -= 10
-        except:
-            st.error("⚠️ Expressão inválida.")
-            st.session_state.pontos -= 10
+    if st.session_state.validado:
+        if st.button("➡️ Fase 2"):
+            avancar_fase(2)
 
-
-# =====================================================
+# =================================================
 # FASE 2
-# =====================================================
+# =================================================
 elif st.session_state.fase == 2:
 
-    st.header("🟡 Fase 2 — Regra do Produto")
+    st.header("⚙️ Fase 2 — Engrenagens Trigonométricas")
 
-    x = sp.symbols("x")
-    resposta_correta = sp.diff(x**2 * sp.sin(x), x)
+    x = sp.symbols('x')
+    funcao = (x**2 + 1) * sp.sin(x)
+    resposta_correta = sp.diff(funcao, x)
 
     st.markdown("""
-O sistema está instável.
+⚙️ No setor de acionamentos mecânicos as engrenagens começaram a oscilar. 
+O movimento depende de dois sistemas interligados e obedece a função abaixo.
 
-Calcule a derivada:
+Para restaurar o equilíbrio e reativar as engrenagens, é necessário descobrir como essa grandeza varia no instante atual.
 
-f(x) = x² · sen(x)
+F(x) = (x² + 1) · sin(x)
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f2")
+    resposta = st.text_input("Digite a solução encontrada:", key="f2_input")
+    confirmar = st.button("⚙️ Regular Oscilação", key="f2_btn")
 
-    if st.button("Confirmar", key="b2"):
-        try:
-            resp = converter_resposta(resposta)
+    if confirmar and not st.session_state.validado:
+        validar_resposta(resposta, resposta_correta, "⚙️ Engrenagens estabilizadas!")
 
-            if sp.simplify(resp - resposta_correta) == 0:
-                st.success("✅ Correto! Avançando.")
-                st.session_state.pontos += 100
-                st.session_state.fase = 3
-                st.rerun()
-            else:
-                st.error("❌ Incorreto.")
-                st.session_state.pontos -= 10
-        except:
-            st.error("⚠️ Expressão inválida.")
-            st.session_state.pontos -= 10
+    if st.session_state.validado:
+        if st.button("➡️ Fase 3"):
+            avancar_fase(3)
 
-
-# =====================================================
+# =================================================
 # FASE 3
-# =====================================================
+# =================================================
 elif st.session_state.fase == 3:
 
-    st.header("🟠 Fase 3 — Regra do Quociente")
+    st.header("🌊 Fase 3 — Fluxo Exponencial")
 
-    x = sp.symbols("x")
-    resposta_correta = sp.diff((x**2 + 1) / x, x)
+    y = sp.symbols('y')
+    funcao = sp.exp(y) / (y**2 + 1)
+    resposta_correta = sp.diff(funcao, y)
 
     st.markdown("""
-Novo desafio detectado.
+🌊 Um fluxo energético atravessa o sistema central.
 
-Calcule:
+Ele cresce rapidamente, obedecendo a função abaixo, e se não for controlado pode causar sobrecarga.
 
-f(x) = (x² + 1) / x
+Determine como essa intensidade varia para controlar a emissão desse fluxo.
+
+Q(y) = eʸ / (y² + 1)
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f3")
+    resposta = st.text_input("Digite a solução encontrada:", key="f3_input")
+    confirmar = st.button("🌊 Controlar Fluxo", key="f3_btn")
 
-    if st.button("Confirmar", key="b3"):
-        try:
-            resp = converter_resposta(resposta)
+    if confirmar and not st.session_state.validado:
+        validar_resposta(resposta, resposta_correta, "🌊 Fluxo controlado!")
 
-            if sp.simplify(resp - resposta_correta) == 0:
-                st.success("✅ Excelente! Avançando.")
-                st.session_state.pontos += 100
-                st.session_state.fase = 4
-                st.rerun()
-            else:
-                st.error("❌ Incorreto.")
-                st.session_state.pontos -= 10
-        except:
-            st.error("⚠️ Expressão inválida.")
-            st.session_state.pontos -= 10
+    if st.session_state.validado:
+        if st.button("➡️ Fase 4"):
+            avancar_fase(4)
 
-
-# =====================================================
+# =================================================
 # FASE 4
-# =====================================================
+# =================================================
 elif st.session_state.fase == 4:
 
-    st.header("🔴 Fase 4 — Regra da Cadeia")
+    st.header("🧬 Fase 4 — Reação Composta")
 
-    x = sp.symbols("x")
-    resposta_correta = sp.diff(sp.sin(x**2), x)
+    z = sp.symbols('z')
+    funcao = sp.cos(3*z**2 + 2*z)
+    resposta_correta = sp.diff(funcao, z)
 
     st.markdown("""
-Sistema quase colapsando!
+🧬 No sistema secundário está ocorrendo um processo de transformação química.
 
-Calcule:
+A reação depende de uma composição interna complexa.
 
-f(x) = sen(x²)
+Analise como essa função varia e estabilize a reação.
+
+R(z) = cos(3z² + 2z)
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f4")
+    resposta = st.text_input("Digite a solução encontrada:", key="f4_input")
+    confirmar = st.button("🧬 Estabilizar Reação", key="f4_btn")
 
-    if st.button("Confirmar", key="b4"):
-        try:
-            resp = converter_resposta(resposta)
+    if confirmar and not st.session_state.validado:
+        validar_resposta(resposta, resposta_correta, "🧬 Reação estabilizada!")
 
-            if sp.simplify(resp - resposta_correta) == 0:
-                st.success("🔥 Última fase desbloqueada!")
-                st.session_state.pontos += 100
-                st.session_state.fase = 5
-                st.rerun()
-            else:
-                st.error("❌ Incorreto.")
-                st.session_state.pontos -= 10
-        except:
-            st.error("⚠️ Expressão inválida.")
-            st.session_state.pontos -= 10
+    if st.session_state.validado:
+        if st.button("➡️ Fase 5"):
+            avancar_fase(5)
 
-
-# =====================================================
+# =================================================
 # FASE 5
-# =====================================================
+# =================================================
 elif st.session_state.fase == 5:
 
-    st.header("🔥 Fase Final — Sistema Supremo")
+    st.header("🔥 Fase Final — O Sistema Supremo")
 
-    w = sp.symbols("w")
+    w = sp.symbols('w')
     funcao = ((w**2 + 1) * sp.exp(w)) / sp.sin(w)
     resposta_correta = sp.diff(funcao, w)
 
     st.markdown("""
 🔥 SISTEMA SUPREMO ATIVADO
 
-Todos os módulos estão conectados.
+Todos os módulos estão conectados. Isso é sinal de catástrofe!
 
-Calcule:
+Agora você precisa calcular como o sistema completo varia para impedir o colapso total.
 
-S(w) = [(w² + 1) · eʷ] / sen(w)
+S(w) = [(w² + 1) · eʷ] / sin(w)
+
+Boa sorte!!!
 """)
 
-    resposta = st.text_input(
-        "Digite a solução encontrada:",
-        key="f5",
-        disabled=st.session_state.validado
-    )
+    resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
+    confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
 
-    if st.button(
-        "🔥 Impedir Colapso",
-        key="b5",
-        disabled=st.session_state.validado
-    ):
-        try:
-            resp = converter_resposta(resposta)
+    if confirmar and not st.session_state.validado:
+        validar_resposta(resposta, resposta_correta, "🏆 MISSÃO COMPLETA!")
 
-            if sp.simplify(resp - resposta_correta) == 0:
-                st.session_state.validado = True
-                st.success("🏆 MISSÃO COMPLETA!")
-                st.balloons()
-            else:
-                st.error("❌ Resposta incorreta.")
-                st.session_state.pontos -= 10
-        except:
-            st.error("⚠️ Expressão inválida.")
-            st.session_state.pontos -= 10
-
-    # Botão separado para pontuação final
-    if st.session_state.validado and not st.session_state.pontuacao_final_calculada:
-        if st.button("🏆 Clique para calcular pontuação final"):
-            st.session_state.pontos *= 2
-            st.session_state.pontuacao_final_calculada = True
-
-    if st.session_state.pontuacao_final_calculada:
-        st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
+        if st.session_state.validado:
+            st.balloons()
