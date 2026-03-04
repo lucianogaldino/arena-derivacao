@@ -53,7 +53,7 @@ if "validado" not in st.session_state:
     st.session_state.validado = False
 
 if "pontos" not in st.session_state:
-    st.session_state.pontos = 100  # começa com 100 pontos
+    st.session_state.pontos = 0  # começa com 0 pontos
 
 # =================================================
 # SIDEBAR
