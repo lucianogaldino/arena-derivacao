@@ -52,6 +52,9 @@ if "fase" not in st.session_state:
 if "validado" not in st.session_state:
     st.session_state.validado = False
 
+if "pontos" not in st.session_state:
+    st.session_state.pontos = 100  # começa com 100 pontos
+
 # =================================================
 # SIDEBAR
 # =================================================
@@ -59,9 +62,14 @@ st.sidebar.title("📊 Progresso")
 st.sidebar.progress(st.session_state.fase / 5)
 st.sidebar.write(f"Fase {st.session_state.fase} de 5")
 
+st.sidebar.markdown("---")
+st.sidebar.subheader("🏆 Pontuação")
+st.sidebar.write(f"**{st.session_state.pontos} pontos**")
+
 if st.sidebar.button("🔄 Reiniciar Missão"):
     st.session_state.fase = 1
     st.session_state.validado = False
+    st.session_state.pontos = 100
     st.rerun()
 
 # =================================================
@@ -75,8 +83,20 @@ def validar_resposta(resposta, resposta_correta, mensagem_sucesso):
             st.session_state.validado = True
         else:
             st.error("❌ Resposta incorreta.")
+            st.session_state.pontos -= 10  # perde 10 por erro
     except:
         st.error("⚠️ Expressão inválida.")
+        st.session_state.pontos -= 10  # também perde se expressão for inválida
+
+# =================================================
+# MODELO DE FASE (mantido igual, só adicionando bônus)
+# =================================================
+
+def avancar_fase(proxima):
+    st.session_state.fase = proxima
+    st.session_state.validado = False
+    st.session_state.pontos += 100  # ganha 100 ao avançar
+    st.rerun()
 
 # =================================================
 # FASE 1
@@ -107,9 +127,7 @@ E(t) = t³ − 2t² + 5t − 7
 
     if st.session_state.validado:
         if st.button("➡️ Fase 2"):
-            st.session_state.fase = 2
-            st.session_state.validado = False
-            st.rerun()
+            avancar_fase(2)
 
 # =================================================
 # FASE 2
@@ -139,9 +157,7 @@ F(x) = (x² + 1) · sin(x)
 
     if st.session_state.validado:
         if st.button("➡️ Fase 3"):
-            st.session_state.fase = 3
-            st.session_state.validado = False
-            st.rerun()
+            avancar_fase(3)
 
 # =================================================
 # FASE 3
@@ -172,9 +188,7 @@ Q(y) = eʸ / (y² + 1)
 
     if st.session_state.validado:
         if st.button("➡️ Fase 4"):
-            st.session_state.fase = 4
-            st.session_state.validado = False
-            st.rerun()
+            avancar_fase(4)
 
 # =================================================
 # FASE 4
@@ -205,9 +219,7 @@ R(z) = cos(3z² + 2z)
 
     if st.session_state.validado:
         if st.button("➡️ Fase 5"):
-            st.session_state.fase = 5
-            st.session_state.validado = False
-            st.rerun()
+            avancar_fase(5)
 
 # =================================================
 # FASE 5
