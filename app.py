@@ -30,7 +30,7 @@ st.markdown("""
 
 Um sistema energético avançado entrou em colapso...
 
-Para estabilizar cada núcleo, você precisará calcular a **taxa de variação** das funções apresentadas.
+Para estabilizar cada núcleo, você precisará calcular a **taxa de variação instantânea (derivada)** das funções apresentadas.
 
 ⚙️ Para escrever as expressões use:
 
