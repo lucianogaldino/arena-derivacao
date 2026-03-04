@@ -226,8 +226,8 @@ R(z) = cos(3z² + 2z)
 # =================================================
 elif st.session_state.fase == 5:
 
-    if "finalizou" not in st.session_state:
-        st.session_state.finalizou = False
+    if "pontuacao_final_calculada" not in st.session_state:
+        st.session_state.pontuacao_final_calculada = False
 
     st.header("🔥 Fase Final — O Sistema Supremo")
 
@@ -250,30 +250,24 @@ Boa sorte!!!
     resposta = st.text_input(
         "Digite a solução encontrada:",
         key="f5_input",
-        disabled=st.session_state.finalizou
+        disabled=st.session_state.validado
     )
 
     confirmar = st.button(
         "🔥 Impedir Colapso",
         key="f5_btn",
-        disabled=st.session_state.finalizou
+        disabled=st.session_state.validado
     )
 
-    # Só entra aqui se ainda não finalizou
-    if confirmar and not st.session_state.finalizou:
-
+    # Validação normal
+    if confirmar and not st.session_state.validado:
         try:
             resp = converter_resposta(resposta)
 
             if sp.simplify(resp - resposta_correta) == 0:
-
-                # 🔥 DOBRA A PONTUAÇÃO IMEDIATAMENTE
-                st.session_state.pontos *= 2
-                st.session_state.finalizou = True
-
+                st.session_state.validado = True
                 st.success("🏆 MISSÃO COMPLETA!")
                 st.balloons()
-
             else:
                 st.error("❌ Resposta incorreta.")
                 st.session_state.pontos -= 10
@@ -282,6 +276,14 @@ Boa sorte!!!
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
-    # Se já finalizou, apenas mostra mensagem final
-    if st.session_state.finalizou:
-        st.success("🏆 MISSÃO COMPLETA!")
+    # Botão separado para pontuação final
+    if st.session_state.validado and not st.session_state.pontuacao_final_calculada:
+
+        if st.button("🏆 Clique para calcular pontuação final"):
+            st.session_state.pontos *= 2
+            st.session_state.pontuacao_final_calculada = True
+            st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
+
+    # Se já calculou, apenas mostra resultado
+    if st.session_state.pontuacao_final_calculada:
+        st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
