@@ -226,6 +226,9 @@ R(z) = cos(3z² + 2z)
 # =================================================
 elif st.session_state.fase == 5:
 
+    if "pontuacao_final_calculada" not in st.session_state:
+        st.session_state.pontuacao_final_calculada = False
+
     st.header("🔥 Fase Final — O Sistema Supremo")
 
     w = sp.symbols('w')
@@ -244,11 +247,43 @@ S(w) = [(w² + 1) · eʷ] / sin(w)
 Boa sorte!!!
 """)
 
-    resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
-    confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
+    resposta = st.text_input(
+        "Digite a solução encontrada:",
+        key="f5_input",
+        disabled=st.session_state.validado
+    )
 
+    confirmar = st.button(
+        "🔥 Impedir Colapso",
+        key="f5_btn",
+        disabled=st.session_state.validado
+    )
+
+    # Validação normal
     if confirmar and not st.session_state.validado:
-        validar_resposta(resposta, resposta_correta, "🏆 MISSÃO COMPLETA!")
+        try:
+            resp = converter_resposta(resposta)
 
-        if st.session_state.validado:
-            st.balloons()
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.session_state.validado = True
+                st.success("🏆 MISSÃO COMPLETA!")
+                st.balloons()
+            else:
+                st.error("❌ Resposta incorreta.")
+                st.session_state.pontos -= 10
+
+        except:
+            st.error("⚠️ Expressão inválida.")
+            st.session_state.pontos -= 10
+
+    # Botão separado para pontuação final
+    if st.session_state.validado and not st.session_state.pontuacao_final_calculada:
+
+        if st.button("🏆 Clique para calcular pontuação final"):
+            st.session_state.pontos *= 2
+            st.session_state.pontuacao_final_calculada = True
+            st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
+
+    # Se já calculou, apenas mostra resultado
+    if st.session_state.pontuacao_final_calculada:
+        st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
