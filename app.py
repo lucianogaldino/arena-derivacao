@@ -226,6 +226,9 @@ R(z) = cos(3z² + 2z)
 # =================================================
 elif st.session_state.fase == 5:
 
+    if "finalizou" not in st.session_state:
+        st.session_state.finalizou = False
+
     st.header("🔥 Fase Final — O Sistema Supremo")
 
     w = sp.symbols('w')
@@ -247,19 +250,13 @@ Boa sorte!!!
     resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
     confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
 
+    # Validação
     if confirmar and not st.session_state.validado:
         try:
             resp = converter_resposta(resposta)
 
             if sp.simplify(resp - resposta_correta) == 0:
                 st.session_state.validado = True
-
-                # 🎯 DOBRA A PONTUAÇÃO FINAL
-                st.session_state.pontos *= 2
-
-                st.success("🏆 MISSÃO COMPLETA!")
-                st.balloons()
-
             else:
                 st.error("❌ Resposta incorreta.")
                 st.session_state.pontos -= 10
@@ -267,3 +264,12 @@ Boa sorte!!!
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
+
+    # Finalização automática (sem precisar clicar de novo)
+    if st.session_state.validado and not st.session_state.finalizou:
+
+        st.session_state.pontos *= 2  # 🔥 dobra pontuação
+        st.session_state.finalizou = True
+
+        st.success("🏆 MISSÃO COMPLETA!")
+        st.balloons()
