@@ -3,9 +3,9 @@ import sympy as sp
 
 st.set_page_config(page_title="Missão Derivadas", page_icon="🚀")
 
-# ==========================================================
-# INICIALIZAÇÃO DO ESTADO
-# ==========================================================
+# =====================================================
+# INICIALIZAÇÃO DO SESSION STATE
+# =====================================================
 if "fase" not in st.session_state:
     st.session_state.fase = 1
 
@@ -19,25 +19,37 @@ if "pontuacao_final_calculada" not in st.session_state:
     st.session_state.pontuacao_final_calculada = False
 
 
-# ==========================================================
-# FUNÇÃO CONVERSÃO
-# ==========================================================
+# =====================================================
+# FUNÇÃO AUXILIAR
+# =====================================================
 def converter_resposta(expr):
     return sp.sympify(expr.replace("^", "**"))
 
 
-# ==========================================================
-# TOPO
-# ==========================================================
+# =====================================================
+# TOPO DO APP
+# =====================================================
 st.title("🚀 Missão: Salvar o Sistema das Derivadas")
 
-st.markdown(f"### 🎯 Pontuação Atual: {st.session_state.pontos} pontos")
+col1, col2 = st.columns([3,1])
+
+with col1:
+    st.markdown(f"### 🎯 Pontuação Atual: {st.session_state.pontos} pontos")
+
+with col2:
+    if st.button("🔄 Reiniciar Missão"):
+        st.session_state.fase = 1
+        st.session_state.pontos = 100
+        st.session_state.validado = False
+        st.session_state.pontuacao_final_calculada = False
+        st.rerun()
+
 st.markdown("---")
 
 
-# ==========================================================
+# =====================================================
 # FASE 1
-# ==========================================================
+# =====================================================
 if st.session_state.fase == 1:
 
     st.header("🟢 Fase 1 — Sistema Linear Inicial")
@@ -53,10 +65,9 @@ Você precisa calcular a taxa de variação da função:
 f(x) = 3x² + 2x
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f1_input")
+    resposta = st.text_input("Digite a derivada:", key="f1")
 
-    if st.button("Confirmar", key="f1_btn"):
-
+    if st.button("Confirmar", key="b1"):
         try:
             resp = converter_resposta(resposta)
 
@@ -68,15 +79,14 @@ f(x) = 3x² + 2x
             else:
                 st.error("❌ Incorreto.")
                 st.session_state.pontos -= 10
-
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
 
-# ==========================================================
+# =====================================================
 # FASE 2
-# ==========================================================
+# =====================================================
 elif st.session_state.fase == 2:
 
     st.header("🟡 Fase 2 — Regra do Produto")
@@ -92,10 +102,9 @@ Calcule a derivada:
 f(x) = x² · sen(x)
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f2_input")
+    resposta = st.text_input("Digite a derivada:", key="f2")
 
-    if st.button("Confirmar", key="f2_btn"):
-
+    if st.button("Confirmar", key="b2"):
         try:
             resp = converter_resposta(resposta)
 
@@ -107,15 +116,14 @@ f(x) = x² · sen(x)
             else:
                 st.error("❌ Incorreto.")
                 st.session_state.pontos -= 10
-
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
 
-# ==========================================================
+# =====================================================
 # FASE 3
-# ==========================================================
+# =====================================================
 elif st.session_state.fase == 3:
 
     st.header("🟠 Fase 3 — Regra do Quociente")
@@ -131,10 +139,9 @@ Calcule:
 f(x) = (x² + 1) / x
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f3_input")
+    resposta = st.text_input("Digite a derivada:", key="f3")
 
-    if st.button("Confirmar", key="f3_btn"):
-
+    if st.button("Confirmar", key="b3"):
         try:
             resp = converter_resposta(resposta)
 
@@ -146,15 +153,14 @@ f(x) = (x² + 1) / x
             else:
                 st.error("❌ Incorreto.")
                 st.session_state.pontos -= 10
-
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
 
-# ==========================================================
+# =====================================================
 # FASE 4
-# ==========================================================
+# =====================================================
 elif st.session_state.fase == 4:
 
     st.header("🔴 Fase 4 — Regra da Cadeia")
@@ -170,10 +176,9 @@ Calcule:
 f(x) = sen(x²)
 """)
 
-    resposta = st.text_input("Digite a derivada:", key="f4_input")
+    resposta = st.text_input("Digite a derivada:", key="f4")
 
-    if st.button("Confirmar", key="f4_btn"):
-
+    if st.button("Confirmar", key="b4"):
         try:
             resp = converter_resposta(resposta)
 
@@ -185,15 +190,14 @@ f(x) = sen(x²)
             else:
                 st.error("❌ Incorreto.")
                 st.session_state.pontos -= 10
-
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
 
-# ==========================================================
+# =====================================================
 # FASE 5
-# ==========================================================
+# =====================================================
 elif st.session_state.fase == 5:
 
     st.header("🔥 Fase Final — Sistema Supremo")
@@ -205,6 +209,8 @@ elif st.session_state.fase == 5:
     st.markdown("""
 🔥 SISTEMA SUPREMO ATIVADO
 
+Todos os módulos estão conectados.
+
 Calcule:
 
 S(w) = [(w² + 1) · eʷ] / sen(w)
@@ -212,16 +218,15 @@ S(w) = [(w² + 1) · eʷ] / sen(w)
 
     resposta = st.text_input(
         "Digite a solução encontrada:",
-        key="f5_input",
+        key="f5",
         disabled=st.session_state.validado
     )
 
     if st.button(
         "🔥 Impedir Colapso",
-        key="f5_btn",
+        key="b5",
         disabled=st.session_state.validado
     ):
-
         try:
             resp = converter_resposta(resposta)
 
@@ -232,37 +237,15 @@ S(w) = [(w² + 1) · eʷ] / sen(w)
             else:
                 st.error("❌ Resposta incorreta.")
                 st.session_state.pontos -= 10
-
         except:
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
     # Botão separado para pontuação final
     if st.session_state.validado and not st.session_state.pontuacao_final_calculada:
-
         if st.button("🏆 Clique para calcular pontuação final"):
             st.session_state.pontos *= 2
             st.session_state.pontuacao_final_calculada = True
-            st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
 
     if st.session_state.pontuacao_final_calculada:
         st.success(f"🎯 Pontuação Final: {st.session_state.pontos} pontos!")
-
-
-# ==========================================================
-# BOTÃO GLOBAL DE REINICIAR
-# ==========================================================
-st.markdown("---")
-
-if st.button("🔄 Reiniciar Missão"):
-
-    st.session_state.fase = 1
-    st.session_state.pontos = 100
-    st.session_state.validado = False
-    st.session_state.pontuacao_final_calculada = False
-
-    for chave in list(st.session_state.keys()):
-        if "input" in chave:
-            del st.session_state[chave]
-
-    st.rerun()
