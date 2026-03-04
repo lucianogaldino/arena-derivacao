@@ -248,7 +248,22 @@ Boa sorte!!!
     confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
 
     if confirmar and not st.session_state.validado:
-        validar_resposta(resposta, resposta_correta, "🏆 MISSÃO COMPLETA!")
+        try:
+            resp = converter_resposta(resposta)
 
-        if st.session_state.validado:
-            st.balloons()
+            if sp.simplify(resp - resposta_correta) == 0:
+                st.session_state.validado = True
+
+                # 🎯 DOBRA A PONTUAÇÃO FINAL
+                st.session_state.pontos *= 2
+
+                st.success("🏆 MISSÃO COMPLETA!")
+                st.balloons()
+
+            else:
+                st.error("❌ Resposta incorreta.")
+                st.session_state.pontos -= 10
+
+        except:
+            st.error("⚠️ Expressão inválida.")
+            st.session_state.pontos -= 10
