@@ -26,14 +26,21 @@ st.set_page_config(page_title="Guardiões da Taxa de Variação", page_icon="⚔
 st.title("⚔️ Guardiões da Taxa de Variação — Nível Avançado")
 
 st.markdown("""
-Calcule a **derivada** da função apresentada.
+# 🌌 Bem-vindo ao Laboratório da Taxa de Variação
 
-Use:
+Um sistema energético avançado entrou em colapso...
+
+Para estabilizar cada núcleo, você precisará calcular a **taxa de variação** das funções apresentadas.
+
+⚙️ Para escrever as expressões use:
+
 - Multiplicação → `*`
 - Potência → `**`
 - Divisão → `/`
-- Trigonométricas → `sin(x)`, `cos(x)`
-- Exponencial → `e`
+- Funções trigonométricas → `sin(x)`, `cos(x)`
+- Exponencial → `e` (representa a constante de Euler)
+
+💡 Digite sua resposta em formato matemático e avance pelas fases.
 """)
 
 # =================================================
@@ -82,10 +89,18 @@ if st.session_state.fase == 1:
     funcao = t**3 - 2*t**2 + 5*t - 7
     resposta_correta = sp.diff(funcao, t)
 
-    st.write("E(t) = t³ − 2t² + 5t − 7")
+    st.markdown("""
+🛰 Um núcleo primário está instável.
+
+A energia armazenada depende do tempo, conforme função abaixo, e está crescendo perigosamente.
+
+Seu objetivo: determinar como essa energia varia instantaneamente, indicando a taxa de variação para estabilizar o núcleo e desbloquear o próximo setor.
+
+E(t) = t³ − 2t² + 5t − 7
+""")
 
     resposta = st.text_input("Digite a solução encontrada:", key="f1_input")
-    confirmar = st.button("⚔️ Confirmar Resposta", key="f1_btn")
+    confirmar = st.button("⚔️ Estabilizar Núcleo", key="f1_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🔥 Núcleo ativado com sucesso!")
@@ -107,10 +122,17 @@ elif st.session_state.fase == 2:
     funcao = (x**2 + 1) * sp.sin(x)
     resposta_correta = sp.diff(funcao, x)
 
-    st.write("F(x) = (x² + 1)·sin(x)")
+    st.markdown("""
+⚙️ No setor de acionamentos mecânicos as engrenagens começaram a oscilar. 
+O movimento depende de dois sistemas interligados e obedece a função abaixo.
+
+Para restaurar o equilíbrio e reativar as engrenagens, é necessário descobrir como essa grandeza varia no instante atual.
+
+F(x) = (x² + 1) · sin(x)
+""")
 
     resposta = st.text_input("Digite a solução encontrada:", key="f2_input")
-    confirmar = st.button("⚙️ Confirmar Resposta", key="f2_btn")
+    confirmar = st.button("⚙️ Regular Oscilação", key="f2_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "⚙️ Engrenagens estabilizadas!")
@@ -132,10 +154,18 @@ elif st.session_state.fase == 3:
     funcao = sp.exp(y) / (y**2 + 1)
     resposta_correta = sp.diff(funcao, y)
 
-    st.write("Q(y) = eʸ / (y² + 1)")
+    st.markdown("""
+🌊 Um fluxo energético atravessa o sistema central.
+
+Ele cresce rapidamente, obedecendo a função abaixo, e se não for controlado pode causar sobrecarga.
+
+Determine como essa intensidade varia para controlar a emissão desse fluxo.
+
+Q(y) = eʸ / (y² + 1)
+""")
 
     resposta = st.text_input("Digite a solução encontrada:", key="f3_input")
-    confirmar = st.button("🌊 Confirmar Resposta", key="f3_btn")
+    confirmar = st.button("🌊 Controlar Fluxo", key="f3_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🌊 Fluxo controlado!")
@@ -157,10 +187,18 @@ elif st.session_state.fase == 4:
     funcao = sp.cos(3*z**2 + 2*z)
     resposta_correta = sp.diff(funcao, z)
 
-    st.write("R(z) = cos(3z² + 2z)")
+    st.markdown("""
+🧬 No sistema secundário está ocorrendo um processo de transformação química.
+
+A reação depende de uma composição interna complexa.
+
+Analise como essa função varia e estabilize a reação.
+
+R(z) = cos(3z² + 2z)
+""")
 
     resposta = st.text_input("Digite a solução encontrada:", key="f4_input")
-    confirmar = st.button("🧬 Confirmar Resposta", key="f4_btn")
+    confirmar = st.button("🧬 Estabilizar Reação", key="f4_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🧬 Reação estabilizada!")
@@ -182,10 +220,20 @@ elif st.session_state.fase == 5:
     funcao = ((w**2 + 1) * sp.exp(w)) / sp.sin(w)
     resposta_correta = sp.diff(funcao, w)
 
-    st.write("S(w) = [(w² + 1)·eʷ] / sin(w)")
+    st.markdown("""
+🔥 SISTEMA SUPREMO ATIVADO
+
+Todos os módulos estão conectados. Isso é sinal de catástrofe!
+
+Agora você precisa calcular como o sistema completo varia para impedir o colapso total.
+
+S(w) = [(w² + 1) · eʷ] / sin(w)
+
+Boa sorte!!!
+""")
 
     resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
-    confirmar = st.button("🔥 Confirmar Resposta", key="f5_btn")
+    confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
 
     if confirmar and not st.session_state.validado:
         validar_resposta(resposta, resposta_correta, "🏆 MISSÃO COMPLETA!")
