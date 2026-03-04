@@ -250,13 +250,21 @@ Boa sorte!!!
     resposta = st.text_input("Digite a solução encontrada:", key="f5_input")
     confirmar = st.button("🔥 Impedir Colapso", key="f5_btn")
 
-    # Validação
-    if confirmar and not st.session_state.validado:
+    if confirmar and not st.session_state.finalizou:
         try:
             resp = converter_resposta(resposta)
 
             if sp.simplify(resp - resposta_correta) == 0:
-                st.session_state.validado = True
+
+                # 🔥 DOBRA IMEDIATAMENTE
+                st.session_state.pontos *= 2
+                st.session_state.finalizou = True
+
+                st.success("🏆 MISSÃO COMPLETA!")
+                st.balloons()
+
+                st.rerun()  # força atualização sem precisar clicar novamente
+
             else:
                 st.error("❌ Resposta incorreta.")
                 st.session_state.pontos -= 10
@@ -265,11 +273,6 @@ Boa sorte!!!
             st.error("⚠️ Expressão inválida.")
             st.session_state.pontos -= 10
 
-    # Finalização automática (sem precisar clicar de novo)
-    if st.session_state.validado and not st.session_state.finalizou:
-
-        st.session_state.pontos *= 2  # 🔥 dobra pontuação
-        st.session_state.finalizou = True
-
+    # Se já finalizou, apenas mostra o resultado
+    if st.session_state.finalizou:
         st.success("🏆 MISSÃO COMPLETA!")
-        st.balloons()
