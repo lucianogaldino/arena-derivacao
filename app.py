@@ -66,10 +66,20 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("🏆 Pontuação")
 st.sidebar.write(f"**{st.session_state.pontos} pontos**")
 
-if st.sidebar.button("🔄 Reiniciar Missão"):
+if st.button("🔄 Reiniciar Missão"):
+
     st.session_state.fase = 1
-    st.session_state.validado = False
     st.session_state.pontos = 100
+    st.session_state.validado = False
+
+    # RESET DA FASE FINAL
+    st.session_state.pontuacao_final_calculada = False
+
+    # Limpar inputs
+    for chave in list(st.session_state.keys()):
+        if "input" in chave:
+            del st.session_state[chave]
+
     st.rerun()
 
 # =================================================
